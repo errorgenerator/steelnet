@@ -11,6 +11,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import org.legion.steel.steelnet.dto.ItemDTOInterface
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
@@ -29,7 +30,7 @@ class GoogleSheetsResolver {
     private val credentialsFilePath = "/hom/tilman/IdeaProjects/steelnet/resources/google/credentials.json"
     private val scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS)
 
-    private lateinit var storedSheetsData: HashMap<String, List<String>>
+    private lateinit var storedSheetsData: HashMap<String, List<ItemDTOInterface>>
 
     private fun getCredentials(httpTransport: NetHttpTransport): Credential {
         val readCredentials = File(this.credentialsFilePath).reader()
@@ -58,15 +59,28 @@ class GoogleSheetsResolver {
         return response.getValues()
     }
 
-    private fun sortGoogleSheetsData(): HashMap<String, List<String>> {
-        val tableNames = listOf(
-            "Items",
-            "Squads",
-            "Stockpiles",
-            "Production",
-            "BasePlan"
+
+    private fun sortGoogleSheetsData(): HashMap<String, List<ItemDTOInterface>> {
+
+        val sortedData: HashMap<String, List<ItemDTOInterface>> = HashMap<String, List<ItemDTOInterface>>()
+
+        val itemTypes: List<String> = listOf(
+            "vehicle",
+            "weapon",
+            "equipment",
+            "deployable"
         )
-        val sortedData: HashMap<String, List<String>> = HashMap<String, List<String>>()
+
+        val fetchedData = this.fetchGoogleSheetsData()
+
+        if (!fetchedData.isNullOrEmpty()) {
+
+            fetchedData.forEach{
+                it.forEach{ ot ->
+                val tmpData = ot.toString()
+            }}
+
+        }
 
         return sortedData
     }
