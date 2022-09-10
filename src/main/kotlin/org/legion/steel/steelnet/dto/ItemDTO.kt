@@ -8,46 +8,46 @@ class ItemDTO : ItemDTOInterface {
 
 
     @JsonProperty("name")
-    private var name: String? = null
+    private var name: String? = ""
 
     @JsonProperty("num_mats")
-    private var numMats: String? = null
+    private var numMats: String? = ""
 
     @JsonProperty("mats_type")
-    private var matsType: String? = null
+    private var matsType: String? = ""
 
     @JsonProperty("stacking_values")
-    private var stackingValues: Array<String>? = null
+    private var stackingValues: Array<String>? = emptyArray()
 
     @JsonProperty("num_per_crate")
-    private var numPerCrate: String? = null
+    private var numPerCrate: String? = ""
 
     @JsonProperty("type")
-    private var itemType: String? = null
+    private var itemType: String? = ""
 
     @JsonProperty("encumbrance")
-    private var equipWeight: String? = null
+    private var equipWeight: String? = ""
 
     @JsonProperty("equip_slot")
-    private var equipSlot: String? = null
+    private var equipSlot: String? = ""
 
     @JsonProperty("weapon_class")
-    private var weaponClass: String? = null
+    private var weaponClass: String? = ""
 
     @JsonProperty("ammo_type")
-    private var ammoType: String? = null
+    private var ammoType: String? = ""
 
     @JsonProperty("vehicle_class")
-    private var vehicleClass: String? = null
+    private var vehicleClass: String? = ""
 
     @JsonProperty("num_crew")
-    private var numCrew: String? = null
+    private var numCrew: String? = ""
 
     @JsonProperty("primary_armament")
-    private var primaryArmament: String? = null
+    private var primaryArmament: String? = ""
 
     @JsonProperty("secondary_armament")
-    private var secondaryArmament: Array<String>? = null
+    private var secondaryArmament: Array<String>? = emptyArray()
 
 
     override fun getName(): String? {

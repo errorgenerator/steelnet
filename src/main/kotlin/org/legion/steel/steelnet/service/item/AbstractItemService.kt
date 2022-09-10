@@ -7,6 +7,6 @@ import org.springframework.http.ResponseEntity
 abstract class AbstractItemService @Autowired constructor(
 ) {
 
-    public abstract fun buildResponse(vararg args: String): ResponseEntity<ItemDTOInterface>
+    public abstract fun buildResponse(name: String): ResponseEntity<ItemDTOInterface>
 
 }

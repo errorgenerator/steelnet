@@ -49,9 +49,9 @@ class GoogleSheetsResolver(
     }
 
 
-    private fun sortGoogleSheetsData(): HashMap<String?, ItemDTOInterface> {
+    private fun sortGoogleSheetsData(): MutableMap<String?, ItemDTOInterface> {
 
-        val sortedData = HashMap<String?, ItemDTOInterface>()
+        val sortedData = HashMap<String?, ItemDTOInterface>().toMutableMap()
 
         val fetchedData = this.fetchGoogleSheetsData()
 
@@ -131,13 +131,13 @@ class GoogleSheetsResolver(
         ) {
             while (!Thread.currentThread().isInterrupted) {
                 Thread.sleep(Duration.ofHours(hours).toMillis())
-                this.storedSheetsData = this.sortGoogleSheetsData()
+                this.storedSheetsData = this.sortGoogleSheetsData() as HashMap<String?, ItemDTOInterface>
             }
         }
     }
 
     init {
-        this.storedSheetsData = this.sortGoogleSheetsData()
+        this.storedSheetsData = this.sortGoogleSheetsData() as HashMap<String?, ItemDTOInterface>
     }
 
     fun getStoredSheetsData(): HashMap<String? ,ItemDTOInterface> {
