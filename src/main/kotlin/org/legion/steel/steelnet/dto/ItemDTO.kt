@@ -4,52 +4,51 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 
 @JsonRootName("item")
-class ItemDTO(
+class ItemDTO : ItemDTOInterface {
+
 
     @JsonProperty("name")
-    private var name: String?,
+    private var name: String? = null
 
     @JsonProperty("num_mats")
-    private var numMats: Int?,
+    private var numMats: String? = null
 
     @JsonProperty("mats_type")
-    private var matsType: String?,
+    private var matsType: String? = null
 
     @JsonProperty("stacking_values")
-    private var stackingValues: Array<Int>?,
+    private var stackingValues: Array<String>? = null
 
     @JsonProperty("num_per_crate")
-    private var numPerCrate: Int?,
+    private var numPerCrate: String? = null
 
     @JsonProperty("type")
-    private var itemType: String?,
+    private var itemType: String? = null
 
     @JsonProperty("encumbrance")
-    private var equipWeight: Int?,
+    private var equipWeight: String? = null
 
     @JsonProperty("equip_slot")
-    private var equipSlot: Int?,
+    private var equipSlot: String? = null
 
     @JsonProperty("weapon_class")
-    private var weaponClass: String?,
+    private var weaponClass: String? = null
 
     @JsonProperty("ammo_type")
-    private var ammoType: String?,
+    private var ammoType: String? = null
 
     @JsonProperty("vehicle_class")
-    private var vehicleClass: String?,
+    private var vehicleClass: String? = null
 
     @JsonProperty("num_crew")
-    private var numCrew: Int?,
+    private var numCrew: String? = null
 
     @JsonProperty("primary_armament")
-    private var primaryArmament: String?,
+    private var primaryArmament: String? = null
 
     @JsonProperty("secondary_armament")
-    private var secondaryArmament: Array<String>?
+    private var secondaryArmament: Array<String>? = null
 
-
-) : ItemDTOInterface {
 
     override fun getName(): String? {
         return this.name
@@ -59,11 +58,11 @@ class ItemDTO(
         this.name = name
     }
 
-    override fun getNumMats(): Int? {
+    override fun getNumMats(): String? {
         return this.numMats
     }
 
-    override fun setNumMats(numMats: Int) {
+    override fun setNumMats(numMats: String) {
         this.numMats = numMats
     }
 
@@ -75,25 +74,22 @@ class ItemDTO(
         this.matsType = matsType
     }
 
-    override fun getStackingValues(): Array<Int>? {
+    override fun getStackingValues(): Array<String>? {
         return this.stackingValues
     }
 
-    override fun setStackingValues(vararg values: Int) {
-        val stackingValuesTmp = arrayOf<Int>().toMutableList()
+    override fun setStackingValues(vararg values: String) {
+        val stackingValuesTmp = arrayOf<String>().toMutableList()
         values.forEach { stackingValuesTmp.add(it) }
         this.stackingValues = stackingValuesTmp.toTypedArray()
     }
 
-    override fun setStackingValues(stackingValues: Array<Int>) {
-        this.stackingValues = stackingValues
-    }
 
-    override fun getNumPerCrate(): Int? {
+    override fun getNumPerCrate(): String? {
         return this.numPerCrate
     }
 
-    override fun setNumPerCrate(numPerCrate: Int) {
+    override fun setNumPerCrate(numPerCrate: String) {
         this.numPerCrate = numPerCrate
     }
 
@@ -105,19 +101,19 @@ class ItemDTO(
         this.itemType = itemType
     }
 
-    override fun getEquipWeight(): Int? {
+    override fun getEquipWeight(): String? {
         return this.equipWeight
     }
 
-    override fun setEquipWeight(equipWeight: Int) {
+    override fun setEquipWeight(equipWeight: String) {
         this.equipWeight = equipWeight
     }
 
-    override fun getEquipSlot(): Int? {
+    override fun getEquipSlot(): String? {
         return this.equipSlot
     }
 
-    override fun setEquipSlot(equipSlot: Int) {
+    override fun setEquipSlot(equipSlot: String) {
         this.equipSlot = equipSlot
     }
 
@@ -145,11 +141,11 @@ class ItemDTO(
         this.vehicleClass = vehicleClass
     }
 
-    override fun getNumCrew(): Int? {
+    override fun getNumCrew(): String? {
         return this.numCrew
     }
 
-    override fun setNumCrew(numCrew: Int) {
+    override fun setNumCrew(numCrew: String) {
         this.numCrew = numCrew
     }
 
