@@ -7,3 +7,9 @@ spring:
       name: testuser
       password: testuser
 
+service:
+  google:
+    id: "1d9Ti9PxdcqeHPGnOejWWeYdTX-YdREpmeg1uBPROZfw"
+    name: "SteelNet"
+    tokens: "/home/tilman/IdeaProjects/steelnet/src/main/resources/tokens"
+    credentials: "/home/tilman/IdeaProjects/steelnet/src/main/resources/google/credentials.json"

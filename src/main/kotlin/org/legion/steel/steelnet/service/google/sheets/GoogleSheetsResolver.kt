@@ -1,91 +1,153 @@
 package org.legion.steel.steelnet.service.google.sheets
 
 import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
-import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import org.apache.commons.io.IOUtils
+import org.legion.steel.steelnet.config.GoogleConfiguration
+import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.File
+import java.nio.charset.StandardCharsets
+import java.time.Duration
 import java.util.*
-import kotlin.collections.HashMap
+import kotlin.concurrent.thread
 
 
 @Service
-class GoogleSheetsResolver {
+class GoogleSheetsResolver(
+    @Autowired private var googleConfiguration: GoogleConfiguration
+) {
 
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
-    private val spreadSheetId = "1d9Ti9PxdcqeHPGnOejWWeYdTX-YdREpmeg1uBPROZfw"
-
-    private val applicationName = "SteelNet"
     private val jsonFactory = GsonFactory.getDefaultInstance()
-    private val tokensDirectoryPath = "/home/tilman/IdeaProjects/steelnet/src/main/resources/"
-    private val credentialsFilePath = "/hom/tilman/IdeaProjects/steelnet/resources/google/credentials.json"
     private val scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS)
 
-    private lateinit var storedSheetsData: HashMap<String, List<ItemDTOInterface>>
+    private lateinit var storedSheetsData: HashMap<String?, ItemDTOInterface>
+    private lateinit var possibleKeys: List<String>
 
-    private fun getCredentials(httpTransport: NetHttpTransport): Credential {
-        val readCredentials = File(this.credentialsFilePath).reader()
-        val clientSecrets = GoogleClientSecrets.load(this.jsonFactory, readCredentials)
+    private fun getCredentials(): Credential {
+        val credentialsString = File(this.googleConfiguration.getCredentialsFilePath()).inputStream().reader().use { it.readText() }
+        val readCredentials = IOUtils.toInputStream(credentialsString, StandardCharsets.UTF_8)
 
-        val flow = GoogleAuthorizationCodeFlow.Builder(
-            httpTransport,
-            this.jsonFactory,
-            clientSecrets,
-            this.scopes
-        )
-            .setDataStoreFactory(FileDataStoreFactory(File(this.tokensDirectoryPath)))
-            .setAccessType("offline")
-            .build()
-        val receiver = LocalServerReceiver.Builder().setPort(8888).build()
-        return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
+        return GoogleCredential.fromStream(readCredentials).createScoped(scopes)
 
     }
 
     private fun fetchGoogleSheetsData(): List<List<Any>>? {
-        val service = Sheets.Builder(this.httpTransport, this.jsonFactory, this.getCredentials(this.httpTransport))
-            .setApplicationName(this.applicationName)
+        val service = Sheets.Builder(this.httpTransport, this.jsonFactory, this.getCredentials())
+            .setApplicationName(this.googleConfiguration.getApplicationName())
             .build()
-        val response = service.spreadsheets().values().get(this.spreadSheetId, "")
+        val response = service.spreadsheets().values().get(this.googleConfiguration.getSpreadSheetId(), "Items")
             .execute()
         return response.getValues()
+
     }
 
 
-    private fun sortGoogleSheetsData(): HashMap<String, List<ItemDTOInterface>> {
+    private fun sortGoogleSheetsData(): MutableMap<String?, ItemDTOInterface> {
 
-        val sortedData: HashMap<String, List<ItemDTOInterface>> = HashMap<String, List<ItemDTOInterface>>()
-
-        val itemTypes: List<String> = listOf(
-            "vehicle",
-            "weapon",
-            "equipment",
-            "deployable"
-        )
+        val sortedData = HashMap<String?, ItemDTOInterface>().toMutableMap()
 
         val fetchedData = this.fetchGoogleSheetsData()
 
         if (!fetchedData.isNullOrEmpty()) {
+            val titleRow = emptyList<String>().toMutableList()
 
-            fetchedData.forEach{
-                it.forEach{ ot ->
-                val tmpData = ot.toString()
-            }}
+            for(cell in fetchedData[0]) {
+                titleRow.add(cell.toString())
+            }
 
+            this.possibleKeys = titleRow.toList()
+
+            for(row in fetchedData) {
+                if(row[0].toString() == "Name") {
+                    continue
+                }
+
+                val itemDTO = ItemDTO()
+
+                for(index in row.indices) {
+                    val mpfVals = emptyList<String>().toMutableList()
+                    when {
+                        titleRow[index] == "Name" -> {
+                            itemDTO.setName(row[index].toString())
+                        }
+                        titleRow[index] == "Type" -> {
+                            itemDTO.setItemType(row[index].toString())
+                        }
+                        titleRow[index] == "Base Required Materials" -> {
+                            itemDTO.setNumMats(row[index].toString())
+                        }
+                        titleRow[index] == "Mat Type" -> {
+                            itemDTO.setNumMats(row[index].toString())
+                        }
+                        titleRow[index] == "Num Per Crate" -> {
+                            itemDTO.setNumPerCrate(row[index].toString())
+                        }
+                        titleRow[index] == "Encumbrance" -> {
+                            itemDTO.setEquipWeight(row[index].toString())
+                        }
+                        titleRow[index] == "Equip Slot" -> {
+                            itemDTO.setEquipSlot(row[index].toString())
+                        }
+                        titleRow[index] == "Weapon Class" -> {
+                            itemDTO.setWeaponClass(row[index].toString())
+                        }
+                        titleRow[index] == "Ammo Type" -> {
+                            itemDTO.setAmmoType(row[index].toString())
+                        }
+                        titleRow[index] == "Vehicle Class" -> {
+                            itemDTO.setVehicleClass(row[index].toString())
+                        }
+                        titleRow[index] == "Num Crew" -> {
+                            itemDTO.setNumCrew(row[index].toString())
+                        }
+                        titleRow[index] == "Primary Armament" -> {
+                            itemDTO.setPrimaryArmament(row[index].toString())
+                        }
+                        titleRow[index] == "Secondary Armament" -> {
+                            itemDTO.setSecondaryArmament(row[index].toString())
+                        }
+                        titleRow[index].startsWith("MPF ") -> {
+                            mpfVals.add(row[index].toString())
+                        }
+                    }
+                }
+
+                sortedData[itemDTO.getName()] = itemDTO
+
+            }
         }
 
         return sortedData
     }
 
+    private fun checkForUpdatesEveryXHours(hours: Long) {
+        thread(
+            start = true
+        ) {
+            while (!Thread.currentThread().isInterrupted) {
+                Thread.sleep(Duration.ofHours(hours).toMillis())
+                this.storedSheetsData = this.sortGoogleSheetsData() as HashMap<String?, ItemDTOInterface>
+            }
+        }
+    }
+
     init {
-        this.storedSheetsData = this.sortGoogleSheetsData()
+        this.storedSheetsData = this.sortGoogleSheetsData() as HashMap<String?, ItemDTOInterface>
+    }
+
+    fun getStoredSheetsData(): HashMap<String? ,ItemDTOInterface> {
+        return this.storedSheetsData
+    }
+
+    fun getPossibleKeys(): List<String> {
+        return this.possibleKeys
     }
 }

@@ -3,29 +3,28 @@ package org.legion.steel.steelnet.dto
 interface ItemDTOInterface {
     fun getName(): String?
     fun setName(name: String)
-    fun getNumMats(): Int?
-    fun setNumMats(numMats: Int)
+    fun getNumMats(): String?
+    fun setNumMats(numMats: String)
     fun getMatsType(): String?
     fun setMatsType(matsType: String)
-    fun getStackingValues(): Array<Int>?
-    fun setStackingValues(vararg values: Int)
-    fun setStackingValues(stackingValues: Array<Int>)
-    fun getNumPerCrate(): Int?
-    fun setNumPerCrate(numPerCrate: Int)
+    fun getStackingValues(): Array<String>?
+    fun setStackingValues(vararg values: String)
+    fun getNumPerCrate(): String?
+    fun setNumPerCrate(numPerCrate: String)
     fun getItemType(): String?
     fun setItemType(itemType: String)
-    fun getEquipWeight(): Int?
-    fun setEquipWeight(equipWeight: Int)
-    fun getEquipSlot(): Int?
-    fun setEquipSlot(equipSlot: Int)
+    fun getEquipWeight(): String?
+    fun setEquipWeight(equipWeight: String)
+    fun getEquipSlot(): String?
+    fun setEquipSlot(equipSlot: String)
     fun getWeaponClass(): String?
     fun setWeaponClass(weaponClass: String)
     fun getAmmoType(): String?
     fun setAmmoType(ammoType: String)
     fun getVehicleClass(): String?
     fun setVehicleClass(vehicleClass: String)
-    fun getNumCrew(): Int?
-    fun setNumCrew(numCrew: Int)
+    fun getNumCrew(): String?
+    fun setNumCrew(numCrew: String)
     fun getPrimaryArmament(): String?
     fun setPrimaryArmament(primaryArmament: String)
     fun getSecondaryArmament(): Array<String>?
