@@ -12,4 +12,8 @@ class DataCacheService(
     public fun getSheetsData(): HashMap<String?, ItemDTOInterface> {
         return this.googleSheetsResolver.getStoredSheetsData()
     }
+
+    public fun getPossibleKeys(): List<String> {
+        return this.googleSheetsResolver.getPossibleKeys()
+    }
 }

@@ -29,6 +29,7 @@ class GoogleSheetsResolver(
     private val scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS)
 
     private lateinit var storedSheetsData: HashMap<String?, ItemDTOInterface>
+    private lateinit var possibleKeys: List<String>
 
     private fun getCredentials(): Credential {
         val credentialsString = File(this.googleConfiguration.getCredentialsFilePath()).inputStream().reader().use { it.readText() }
@@ -61,6 +62,8 @@ class GoogleSheetsResolver(
             for(cell in fetchedData[0]) {
                 titleRow.add(cell.toString())
             }
+
+            this.possibleKeys = titleRow.toList()
 
             for(row in fetchedData) {
                 if(row[0].toString() == "Name") {
@@ -142,5 +145,9 @@ class GoogleSheetsResolver(
 
     fun getStoredSheetsData(): HashMap<String? ,ItemDTOInterface> {
         return this.storedSheetsData
+    }
+
+    fun getPossibleKeys(): List<String> {
+        return this.possibleKeys
     }
 }
