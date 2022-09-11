@@ -75,6 +75,9 @@ class ItemDTO : ItemDTOInterface {
     }
 
     override fun getStackingValues(): Array<String>? {
+        if(this.stackingValues == null) {
+            this.stackingValues = emptyArray()
+        }
         return this.stackingValues
     }
 
