@@ -9,6 +9,6 @@ abstract class AbstractItemService {
     abstract fun buildListResponse(vararg itemType: String, searchForTypes: Boolean): ResponseEntity<List<ItemDTOInterface>>
     abstract fun buildResponseForAll(): ResponseEntity<List<ItemDTOInterface>>
     abstract fun getItemListByTypeFromDB(itemType: String, foundItems: MutableList<ItemDTOInterface>)
-    abstract fun getItemListByXFromDB(key: String, value: String, foundItems: Any?)
+    abstract fun getItemListByXFromDB(key: String, value: String, foundItems: MutableList<ItemDTOInterface>)
 
 }

@@ -5,53 +5,51 @@ import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
 @Document("items")
-class ItemModel(
-    @Id private var id: String,
+class ItemModel {
+
+    @Id private var id: String = ""
 
     @Field("name")
-    private var name: String?,
+    private var name: String? = ""
 
     @Field("num_mats")
-    private var numMats: String?,
+    private var numMats: String? = ""
 
     @Field("mats_type")
-    private var matsType: String?,
+    private var matsType: String? = ""
 
     @Field("stacking_values")
-    private var stackingValues: Array<String>?,
+    private var stackingValues: Array<String>? = emptyArray()
 
     @Field("num_per_crate")
-    private var numPerCrate: String?,
+    private var numPerCrate: String? = ""
 
     @Field("type")
-    private var itemType: String?,
+    private var itemType: String? = ""
 
     @Field("encumbrance")
-    private var equipWeight: String?,
+    private var equipWeight: String? = ""
 
     @Field("equip_slot")
-    private var equipSlot: String?,
+    private var equipSlot: String? = ""
 
     @Field("weapon_class")
-    private var weaponClass: String?,
+    private var weaponClass: String? = ""
 
     @Field("ammo_type")
-    private var ammoType: String?,
+    private var ammoType: String? = ""
 
     @Field("vehicle_class")
-    private var vehicleClass: String?,
+    private var vehicleClass: String? = ""
 
     @Field("num_crew")
-    private var numCrew: String?,
+    private var numCrew: String? = ""
 
     @Field("primary_armament")
-    private var primaryArmament: String?,
+    private var primaryArmament: String? = ""
 
     @Field("secondary_armament")
-    private var secondaryArmament: Array<String>?
-
-
-) {
+    private var secondaryArmament: Array<String>? = emptyArray()
 
     fun getName(): String? {
         return this.name

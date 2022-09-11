@@ -8,7 +8,37 @@ import org.springframework.stereotype.Service
 @Service
 class ItemMapperService {
 
-    fun mapInBulk(databaseEntries: MutableList<ItemModel>): MutableList<ItemDTOInterface> {
+    fun mapItemModelInBulk(dtoList: MutableList<ItemDTOInterface>): MutableList<ItemModel> {
+        val returnList = emptyList<ItemModel>().toMutableList()
+
+        dtoList.forEach{
+            returnList.add(this.mapItemModel(it))
+        }
+
+        return returnList
+    }
+
+    fun mapItemModel(input: ItemDTOInterface): ItemModel {
+        val itemModel = ItemModel()
+
+        input.getName()?.let { itemModel.setName(it) }
+        input.getNumMats()?.let { itemModel.setNumMats(it) }
+        input.getMatsType()?.let { itemModel.setMatsType(it) }
+        input.getStackingValues()?.let { itemModel.setStackingValues(*it) }
+        input.getNumPerCrate()?.let { itemModel.setNumPerCrate(it) }
+        input.getItemType()?.let { itemModel.setItemType(it) }
+        input.getEquipSlot()?.let { itemModel.setEquipSlot(it) }
+        input.getWeaponClass()?.let { itemModel.setWeaponClass(it) }
+        input.getAmmoType()?.let { itemModel.setAmmoType(it) }
+        input.getVehicleClass()?.let { itemModel.setVehicleClass(it) }
+        input.getNumCrew()?.let { itemModel.setNumCrew(it) }
+        input.getPrimaryArmament()?.let { itemModel.setPrimaryArmament(it) }
+        input.getSecondaryArmament()?.let { itemModel.setSecondaryArmament(*it) }
+
+        return itemModel
+    }
+
+    fun mapItemDTOInBulk(databaseEntries: MutableList<ItemModel>): MutableList<ItemDTOInterface> {
         val returnList = emptyList<ItemDTOInterface>().toMutableList()
 
         databaseEntries.forEach{

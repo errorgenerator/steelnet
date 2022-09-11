@@ -10,6 +10,9 @@ import org.apache.commons.io.IOUtils
 import org.legion.steel.steelnet.config.GoogleConfiguration
 import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
+import org.legion.steel.steelnet.model.ItemModel
+import org.legion.steel.steelnet.repository.ItemRepository
+import org.legion.steel.steelnet.service.util.ItemMapperService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.File
@@ -21,7 +24,9 @@ import kotlin.concurrent.thread
 
 @Service
 class GoogleSheetsResolver(
-    @Autowired private var googleConfiguration: GoogleConfiguration
+    @Autowired private var googleConfiguration: GoogleConfiguration,
+    @Autowired private var itemRepository: ItemRepository,
+    @Autowired private var mappingService: ItemMapperService
 ) {
 
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
@@ -32,7 +37,8 @@ class GoogleSheetsResolver(
     private lateinit var possibleKeys: List<String>
 
     private fun getCredentials(): Credential {
-        val credentialsString = File(this.googleConfiguration.getCredentialsFilePath()).inputStream().reader().use { it.readText() }
+        val credentialsString =
+            File(this.googleConfiguration.getCredentialsFilePath()).inputStream().reader().use { it.readText() }
         val readCredentials = IOUtils.toInputStream(credentialsString, StandardCharsets.UTF_8)
 
         return GoogleCredential.fromStream(readCredentials).createScoped(scopes)
@@ -59,61 +65,74 @@ class GoogleSheetsResolver(
         if (!fetchedData.isNullOrEmpty()) {
             val titleRow = emptyList<String>().toMutableList()
 
-            for(cell in fetchedData[0]) {
+            for (cell in fetchedData[0]) {
                 titleRow.add(cell.toString())
             }
 
             this.possibleKeys = titleRow.toList()
 
-            for(row in fetchedData) {
-                if(row[0].toString() == "Name") {
+            for (row in fetchedData) {
+                if (row[0].toString() == "Name") {
                     continue
                 }
 
                 val itemDTO = ItemDTO()
 
-                for(index in row.indices) {
+                for (index in row.indices) {
                     val mpfVals = emptyList<String>().toMutableList()
                     when {
                         titleRow[index] == "Name" -> {
                             itemDTO.setName(row[index].toString())
                         }
+
                         titleRow[index] == "Type" -> {
                             itemDTO.setItemType(row[index].toString())
                         }
+
                         titleRow[index] == "Base Required Materials" -> {
                             itemDTO.setNumMats(row[index].toString())
                         }
+
                         titleRow[index] == "Mat Type" -> {
                             itemDTO.setNumMats(row[index].toString())
                         }
+
                         titleRow[index] == "Num Per Crate" -> {
                             itemDTO.setNumPerCrate(row[index].toString())
                         }
+
                         titleRow[index] == "Encumbrance" -> {
                             itemDTO.setEquipWeight(row[index].toString())
                         }
+
                         titleRow[index] == "Equip Slot" -> {
                             itemDTO.setEquipSlot(row[index].toString())
                         }
+
                         titleRow[index] == "Weapon Class" -> {
                             itemDTO.setWeaponClass(row[index].toString())
                         }
+
                         titleRow[index] == "Ammo Type" -> {
                             itemDTO.setAmmoType(row[index].toString())
                         }
+
                         titleRow[index] == "Vehicle Class" -> {
                             itemDTO.setVehicleClass(row[index].toString())
                         }
+
                         titleRow[index] == "Num Crew" -> {
                             itemDTO.setNumCrew(row[index].toString())
                         }
+
                         titleRow[index] == "Primary Armament" -> {
                             itemDTO.setPrimaryArmament(row[index].toString())
                         }
+
                         titleRow[index] == "Secondary Armament" -> {
                             itemDTO.setSecondaryArmament(row[index].toString())
                         }
+
                         titleRow[index].startsWith("MPF ") -> {
                             mpfVals.add(row[index].toString())
                         }
@@ -124,6 +143,16 @@ class GoogleSheetsResolver(
 
             }
         }
+
+        val receivedModels = emptyList<ItemModel>().toMutableList()
+
+        sortedData.forEach{
+            receivedModels.add(
+                this.mappingService.mapItemModel(it.value)
+            )
+        }
+
+        this.itemRepository.saveAll(receivedModels)
 
         return sortedData
     }
@@ -143,7 +172,7 @@ class GoogleSheetsResolver(
         this.storedSheetsData = this.sortGoogleSheetsData() as HashMap<String?, ItemDTOInterface>
     }
 
-    fun getStoredSheetsData(): HashMap<String? ,ItemDTOInterface> {
+    fun getStoredSheetsData(): HashMap<String?, ItemDTOInterface> {
         return this.storedSheetsData
     }
 

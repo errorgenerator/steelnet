@@ -63,11 +63,12 @@ class ItemService(
 
     override fun getItemListByTypeFromDB(itemType: String, foundItems: MutableList<ItemDTOInterface>) {
         val databaseEntries = this.itemRepository.getItemModelsByItemType(itemType)
-        foundItems.addAll(this.itemMapperService.mapInBulk(databaseEntries))
+        foundItems.addAll(this.itemMapperService.mapItemDTOInBulk(databaseEntries))
     }
 
-    override fun getItemListByXFromDB(key: String, value: String, foundItems: Any?) {
-        TODO("Not yet implemented")
+    override fun getItemListByXFromDB(key: String, value: String, foundItems: MutableList<ItemDTOInterface>) {
+        val databaseEntries = this.itemRepository.getItemModelByFieldAndValue(key, value)
+        foundItems.addAll(this.itemMapperService.mapItemDTOInBulk(databaseEntries))
     }
 
     private fun getItemListByTypeFromCache(itemType: String, foundItems: MutableList<ItemDTOInterface>) {
