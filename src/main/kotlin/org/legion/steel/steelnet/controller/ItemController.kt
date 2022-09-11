@@ -1,5 +1,7 @@
 package org.legion.steel.steelnet.controller
 
+import com.google.api.client.json.gson.GsonFactory
+import com.google.gson.GsonBuilder
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -144,7 +146,16 @@ class ItemController(
     @ApiResponses(
         ApiResponse(
             responseCode = "200",
-            description = "A list of Items is contained within the ResponseBody"
+            description = "A list of Items is contained within the ResponseBody",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(
+                        implementation = ItemDTO::class,
+                        title = "A List of Items"
+                    )
+                )
+            ]
         ),
         ApiResponse(
             responseCode = "401",
