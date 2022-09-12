@@ -1,13 +1,15 @@
 package org.legion.steel.steelnet.model
 
-import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
+import org.springframework.data.mongodb.core.mapping.MongoId
+import kotlin.properties.Delegates
 
-@Document("items")
-class ItemModel {
-
-    @Id private var id: String = ""
+@Document(collection = "items")
+class ItemModel(
+    @MongoId
+    private var id: Int
+) {
 
     @Field("name")
     private var name: String? = ""
@@ -84,7 +86,7 @@ class ItemModel {
 
      fun setStackingValues(vararg values: String) {
         val stackingValuesTmp = arrayOf<String>().toMutableList()
-        values.forEach { stackingValuesTmp.add(it) }
+        values.forEach { stackingValuesTmp.add(it.trim()) }
         this.stackingValues = stackingValuesTmp.toTypedArray()
     }
 
@@ -167,7 +169,7 @@ class ItemModel {
 
     fun setSecondaryArmament(vararg values: String) {
         val tmpVals = arrayOf<String>().toMutableList()
-        values.forEach { tmpVals.add(it) }
+        values.forEach { tmpVals.add(it.trim()) }
         this.secondaryArmament = tmpVals.toTypedArray()
     }
 

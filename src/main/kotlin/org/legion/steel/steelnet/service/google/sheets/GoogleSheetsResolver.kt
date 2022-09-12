@@ -1,12 +1,8 @@
 package org.legion.steel.steelnet.service.google.sheets
 
-import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
+
+
 import com.google.api.services.sheets.v4.Sheets
-import com.google.api.services.sheets.v4.SheetsScopes
-import org.apache.commons.io.IOUtils
 import org.legion.steel.steelnet.config.GoogleConfiguration
 import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
@@ -15,8 +11,6 @@ import org.legion.steel.steelnet.repository.ItemRepository
 import org.legion.steel.steelnet.service.util.ItemMapperService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.io.File
-import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.*
 import kotlin.concurrent.thread
@@ -24,43 +18,22 @@ import kotlin.concurrent.thread
 
 @Service
 class GoogleSheetsResolver(
-    @Autowired private var googleConfiguration: GoogleConfiguration,
+    @Autowired googleConfiguration: GoogleConfiguration,
     @Autowired private var itemRepository: ItemRepository,
     @Autowired private var mappingService: ItemMapperService
+) : AbstractGoogleSheetsService(
+    googleConfiguration
 ) {
-
-    private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
-    private val jsonFactory = GsonFactory.getDefaultInstance()
-    private val scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS)
 
     private lateinit var storedSheetsData: HashMap<String?, ItemDTOInterface>
     private lateinit var possibleKeys: List<String>
-
-    private fun getCredentials(): Credential {
-        val credentialsString =
-            File(this.googleConfiguration.getCredentialsFilePath()).inputStream().reader().use { it.readText() }
-        val readCredentials = IOUtils.toInputStream(credentialsString, StandardCharsets.UTF_8)
-
-        return GoogleCredential.fromStream(readCredentials).createScoped(scopes)
-
-    }
-
-    private fun fetchGoogleSheetsData(): List<List<Any>>? {
-        val service = Sheets.Builder(this.httpTransport, this.jsonFactory, this.getCredentials())
-            .setApplicationName(this.googleConfiguration.getApplicationName())
-            .build()
-        val response = service.spreadsheets().values().get(this.googleConfiguration.getSpreadSheetId(), "Items")
-            .execute()
-        return response.getValues()
-
-    }
 
 
     private fun sortGoogleSheetsData(): MutableMap<String?, ItemDTOInterface> {
 
         val sortedData = HashMap<String?, ItemDTOInterface>().toMutableMap()
 
-        val fetchedData = this.fetchGoogleSheetsData()
+        val fetchedData = this.fetchGoogleSheetsData(this.googleConfiguration.getSpreadSheetId(), "items")
 
         if (!fetchedData.isNullOrEmpty()) {
             val titleRow = emptyList<String>().toMutableList()
@@ -78,8 +51,8 @@ class GoogleSheetsResolver(
 
                 val itemDTO = ItemDTO()
 
+                val mpfVals = emptyList<String>().toMutableList()
                 for (index in row.indices) {
-                    val mpfVals = emptyList<String>().toMutableList()
                     when {
                         titleRow[index] == "Name" -> {
                             itemDTO.setName(row[index].toString())
@@ -94,7 +67,7 @@ class GoogleSheetsResolver(
                         }
 
                         titleRow[index] == "Mat Type" -> {
-                            itemDTO.setNumMats(row[index].toString())
+                            itemDTO.setMatsType(row[index].toString())
                         }
 
                         titleRow[index] == "Num Per Crate" -> {
@@ -137,6 +110,7 @@ class GoogleSheetsResolver(
                             mpfVals.add(row[index].toString())
                         }
                     }
+                    itemDTO.setStackingValues(*mpfVals.toTypedArray())
                 }
 
                 sortedData[itemDTO.getName()] = itemDTO
@@ -146,10 +120,13 @@ class GoogleSheetsResolver(
 
         val receivedModels = emptyList<ItemModel>().toMutableList()
 
+        var idCount = 0
+
         sortedData.forEach{
             receivedModels.add(
-                this.mappingService.mapItemModel(it.value)
+                this.mappingService.mapItemModel(it.value, idCount)
             )
+            idCount++
         }
 
         this.itemRepository.saveAll(receivedModels)

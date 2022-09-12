@@ -11,30 +11,33 @@ class ItemMapperService {
     fun mapItemModelInBulk(dtoList: MutableList<ItemDTOInterface>): MutableList<ItemModel> {
         val returnList = emptyList<ItemModel>().toMutableList()
 
+        var idCount = 0
+
         dtoList.forEach {
-            returnList.add(this.mapItemModel(it))
+            returnList.add(this.mapItemModel(it, idCount))
+            idCount++
         }
 
         return returnList
     }
 
-    fun mapItemModel(input: ItemDTOInterface): ItemModel {
-        val itemModel = ItemModel()
+    fun mapItemModel(input: ItemDTOInterface, id: Int): ItemModel {
+        val itemModel = ItemModel(id)
 
-        input.getName()?.let { itemModel.setName(it) }
-        input.getNumMats()?.let { itemModel.setNumMats(it) }
-        input.getMatsType()?.let { itemModel.setMatsType(it) }
+        input.getName()?.let { itemModel.setName(it.trim()) }
+        input.getNumMats()?.let { itemModel.setNumMats(it.trim()) }
+        input.getMatsType()?.let { itemModel.setMatsType(it.trim()) }
         input.getStackingValues()?.let { itemModel.setStackingValues(*it) }
-        input.getNumPerCrate()?.let { itemModel.setNumPerCrate(it) }
-        input.getItemType()?.let { itemModel.setItemType(it) }
-        input.getEquipSlot()?.let { itemModel.setEquipSlot(it) }
-        input.getWeaponClass()?.let { itemModel.setWeaponClass(it) }
-        input.getAmmoType()?.let { itemModel.setAmmoType(it) }
-        input.getVehicleClass()?.let { itemModel.setVehicleClass(it) }
-        input.getNumCrew()?.let { itemModel.setNumCrew(it) }
-        input.getPrimaryArmament()?.let { itemModel.setPrimaryArmament(it) }
+        input.getNumPerCrate()?.let { itemModel.setNumPerCrate(it.trim()) }
+        input.getItemType()?.let { itemModel.setItemType(it.trim()) }
+        input.getEquipSlot()?.let { itemModel.setEquipSlot(it.trim()) }
+        input.getWeaponClass()?.let { itemModel.setWeaponClass(it.trim()) }
+        input.getAmmoType()?.let { itemModel.setAmmoType(it.trim()) }
+        input.getVehicleClass()?.let { itemModel.setVehicleClass(it.trim()) }
+        input.getNumCrew()?.let { itemModel.setNumCrew(it.trim()) }
+        input.getPrimaryArmament()?.let { itemModel.setPrimaryArmament(it.trim()) }
         input.getSecondaryArmament()?.let { itemModel.setSecondaryArmament(*it) }
-        input.getDescription()?.let { itemModel.setDescription(it) }
+        input.getDescription()?.let { itemModel.setDescription(it.trim()) }
 
         return itemModel
     }
@@ -55,7 +58,7 @@ class ItemMapperService {
 
         when (itemModel.getName() != null) {
             true -> {
-                itemModel.getName()?.let { returnModel.setName(it) }
+                itemModel.getName()?.let { returnModel.setName(it.trim()) }
             }
 
             false -> {
@@ -65,11 +68,11 @@ class ItemMapperService {
 
         when (itemModel.getNumMats() != null) {
             true -> {
-                itemModel.getNumMats()?.let { returnModel.setNumMats(it) }
+                itemModel.getNumMats()?.let { returnModel.setNumMats(it.trim()) }
             }
 
             false -> {
-                returnModel.setNumMats("NAN")
+                returnModel.setNumMats("")
             }
         }
 
@@ -85,71 +88,71 @@ class ItemMapperService {
 
         when (itemModel.getNumPerCrate() != null) {
             true -> {
-                itemModel.getNumPerCrate()?.let { returnModel.setNumPerCrate(it) }
+                itemModel.getNumPerCrate()?.let { returnModel.setNumPerCrate(it.trim()) }
             }
 
             false -> {
-                returnModel.setNumPerCrate("NAN")
+                returnModel.setNumPerCrate("")
             }
         }
 
         when (itemModel.getItemType() != null) {
             true -> {
-                itemModel.getItemType()?.let { returnModel.setItemType(it) }
+                itemModel.getItemType()?.let { returnModel.setItemType(it.trim()) }
             }
 
             false -> {
-                returnModel.setItemType("UNKNOWN TYPE")
+                returnModel.setItemType("")
             }
         }
 
         when (itemModel.getEquipWeight() != null) {
             true -> {
-                itemModel.getEquipWeight()?.let { returnModel.setEquipWeight(it) }
+                itemModel.getEquipWeight()?.let { returnModel.setEquipWeight(it.trim()) }
             }
 
             false -> {
-                returnModel.setEquipWeight("NAN")
+                returnModel.setEquipWeight("")
             }
         }
 
         when (itemModel.getEquipSlot() != null) {
             true -> {
-                itemModel.getEquipSlot()?.let { returnModel.setEquipSlot(it) }
+                itemModel.getEquipSlot()?.let { returnModel.setEquipSlot(it.trim()) }
             }
 
             false -> {
-                returnModel.setEquipSlot("NAN")
+                returnModel.setEquipSlot("")
             }
         }
 
         when (itemModel.getWeaponClass() != null) {
             true -> {
-                itemModel.getWeaponClass()?.let { returnModel.setWeaponClass(it) }
+                itemModel.getWeaponClass()?.let { returnModel.setWeaponClass(it.trim()) }
             }
 
             false -> {
-                returnModel.setWeaponClass("NAN")
+                returnModel.setWeaponClass("")
             }
         }
 
         when (itemModel.getAmmoType() != null) {
             true -> {
-                itemModel.getAmmoType()?.let { returnModel.setAmmoType(it) }
+                itemModel.getAmmoType()?.let { returnModel.setAmmoType(it.trim()) }
             }
 
             false -> {
-                returnModel.setAmmoType("NAN")
+                returnModel.setAmmoType("")
             }
         }
 
         when (itemModel.getPrimaryArmament() != null) {
             true -> {
-                itemModel.getPrimaryArmament()?.let { returnModel.setPrimaryArmament(it) }
+                itemModel.getPrimaryArmament()?.let { returnModel.setPrimaryArmament(it.trim()) }
             }
 
             false -> {
-                returnModel.setPrimaryArmament("NAN")
+                returnModel.setPrimaryArmament("")
             }
         }
 
@@ -159,7 +162,7 @@ class ItemMapperService {
             }
 
             false -> {
-                returnModel.setSecondaryArmament("NAN")
+                returnModel.setSecondaryArmament("")
             }
         }
 

@@ -2,13 +2,13 @@ package org.legion.steel.steelnet.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
-import org.springframework.context.annotation.Configuration
 
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "service.google")
 class GoogleConfiguration(
     private var id: String,
+    private var tokenId: String,
     private var name: String,
     private var tokens: String,
     private var credentials: String
@@ -28,7 +28,7 @@ class GoogleConfiguration(
         return this.tokens
     }
 
-    fun getCredentialsFilePath(): String {
+    fun getCredentialsString(): String {
         return this.credentials
     }
 
@@ -44,5 +44,12 @@ class GoogleConfiguration(
         this.tokens = tokens
     }
 
+    fun getTokenId(): String {
+        return this.tokenId
+    }
+
+    fun setTokenId(id: String) {
+        this.tokenId = id
+    }
 
 }
