@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  mongo-db-server:
+    image: mongo:latest
+    hostname: mongodb-server
+    container_name: mongodb-server
+    volumes:
+      - ./setup/mongo:/docker-entrypoint-initdb.d
+
+  steelnet-service-api:
+    container_name: steelnet-service-api
+    hostname: steelnet-service-api
+    image: steelnet-service-api:latest
+    build:
+      context: .
+    restart: "unless-stopped"
+    depends_on:
+      - mongodb-server
+    ports:
+      - 9000:9000
+    env_file:
+      - .env
+    volumes:
+      - /var/lib/steelnet/releases/logs:/var/log

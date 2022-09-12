@@ -4,6 +4,7 @@ import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
 import org.legion.steel.steelnet.model.ItemModel
 import org.springframework.stereotype.Service
+import java.math.BigInteger
 
 @Service
 class ItemMapperService {
@@ -11,18 +12,18 @@ class ItemMapperService {
     fun mapItemModelInBulk(dtoList: MutableList<ItemDTOInterface>): MutableList<ItemModel> {
         val returnList = emptyList<ItemModel>().toMutableList()
 
-        var idCount = 0
+        var idCounter = BigInteger.ZERO
 
         dtoList.forEach {
-            returnList.add(this.mapItemModel(it, idCount))
-            idCount++
+            returnList.add(this.mapItemModel(it, idCounter))
+            idCounter++
         }
 
         return returnList
     }
 
-    fun mapItemModel(input: ItemDTOInterface, id: Int): ItemModel {
-        val itemModel = ItemModel(id)
+    fun mapItemModel(input: ItemDTOInterface, id: BigInteger): ItemModel {
+        val itemModel = ItemModel(id.toString())
 
         input.getName()?.let { itemModel.setName(it.trim()) }
         input.getNumMats()?.let { itemModel.setNumMats(it.trim()) }

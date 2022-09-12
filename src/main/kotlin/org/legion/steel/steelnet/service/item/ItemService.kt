@@ -69,7 +69,11 @@ class ItemService(
 
     override fun buildResponseForAll(token: String): ResponseEntity<List<ItemDTOInterface>> {
         if(this.tokenValidator.validateToken(token)) {
-            return ResponseEntity.ok(this.dataCacheService.getSheetsData().values.toList())
+            var responseList = this.dataCacheService.getSheetsData().values.toList()
+            if(responseList.isEmpty()) {
+                responseList = this.itemMapperService.mapItemDTOInBulk(this.itemRepository.findAll())
+            }
+            return ResponseEntity.ok(responseList)
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()

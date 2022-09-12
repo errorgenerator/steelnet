@@ -2,7 +2,7 @@ package org.legion.steel.steelnet.service.google.sheets
 
 
 
-import com.google.api.services.sheets.v4.Sheets
+
 import org.legion.steel.steelnet.config.GoogleConfiguration
 import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
@@ -11,6 +11,7 @@ import org.legion.steel.steelnet.repository.ItemRepository
 import org.legion.steel.steelnet.service.util.ItemMapperService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.math.BigInteger
 import java.time.Duration
 import java.util.*
 import kotlin.concurrent.thread
@@ -120,13 +121,13 @@ class GoogleSheetsResolver(
 
         val receivedModels = emptyList<ItemModel>().toMutableList()
 
-        var idCount = 0
+        var idCounter = BigInteger.ZERO
 
         sortedData.forEach{
             receivedModels.add(
-                this.mappingService.mapItemModel(it.value, idCount)
+                this.mappingService.mapItemModel(it.value, idCounter)
             )
-            idCount++
+                idCounter++
         }
 
         this.itemRepository.saveAll(receivedModels)

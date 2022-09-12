@@ -1,0 +1,108 @@
+name: Build Service with gradle and deploy the Service to Docker Container Server
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+      - '*.*.*-alpha'
+      - '*.*.*-beta'
+
+jobs:
+
+  build-deploy:
+
+    runs-on: ubuntu-latest
+    env:
+      SFTP_TARGET_DIR: '/var/lib/steelnet/releases/'
+      PROJECT_NAME: steelmind-service-api
+      API_SECRET: ${{ secrets.GOOGLE_API_ACCESS_SECRET }}
+      MONGO: mongodb://mongodb-server
+      LOGLEVEL: WARN
+
+    steps:
+
+      - name: Prepare directories if not exist
+        uses: appleboy/ssh-action@master
+        with:
+          host: 'TODO' #TODO get a server
+          username: 'deploy'
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: 'mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib && mkdir -p ${{ env.SFTP_TARGET_DIR }}/logs/ && mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo/'
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Create .env file
+        run: |
+          touch .env
+          echo GOOGLE_CREDENTIALS=${API_SECRET} > .env
+          echo '\n' >> .env
+          echo LOGLEVEL=${LOGLEVEL} >> .env
+          echo '\n' >> .env
+          echo MONGOURI=${MONGO} >> .env
+          echo '\n' >> .env
+          echo COMPOSE_PROJECT_NAME=${PROJECT_NAME} >> .env
+          echo '\n' >> .env
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build Fat Jar with Gradle
+        run: ./gradlew bootJar
+
+      - name: List Build dir contents
+        run: |
+          ls -lha ./build/lib/
+
+      - name: Deploy Artifact to Server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'deploy'
+          server: "Server" # TODO acquire a server
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          local_path: 'build/lib/*.jar'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib/'
+
+      - name: Deploy .env file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'deploy'
+          server: 'Server' #TODO acquire a server
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          local_path: './.env'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+
+      - name: Deploy Dockerfile to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'deploy'
+          server: 'Server' #TODO acquire a server
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          local_path: './Dockerfile'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+
+      - name: Deploy docker-compose.yml to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'deploy'
+          server: 'Server' #TODO acquire a server
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          local_path: './docker-compose.yml'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+
+      - name: Deploy MongoInit file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'deploy'
+          server: 'Server' #TODO acquire a server
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          local_path: './setup/mongo/mongo-init.js'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo'
+
+      - name: Build and Start Docker container
+        uses: appleboy/ssh-action@master
+        with:
+          host: 'Server'
+          username: 'deploy'
+          key: '${{ secrets.DEPLOY_SSH_KEY }}'
+          script: 'cd ${{ env.SFTP_TARGET_DIR }}/services/service-api && docker-compose down && docker-compose up -d --build'
