@@ -23,7 +23,7 @@ class ItemMapperService {
     }
 
     fun mapItemModel(input: ItemDTOInterface, id: BigInteger): ItemModel {
-        val itemModel = ItemModel(id)
+        val itemModel = ItemModel(id.toString())
 
         input.getName()?.let { itemModel.setName(it.trim()) }
         input.getNumMats()?.let { itemModel.setNumMats(it.trim()) }

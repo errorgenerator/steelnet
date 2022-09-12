@@ -21,3 +21,4 @@ service:
     tokenid: "1YS4NRGxhuWNWqjmnA7A-rtPxAy0RXJuw_SXrbkZHI3g"
     name: "SteelNet"
     tokens: "/home/tilman/IdeaProjects/steelnet/src/main/resources/tokens"
+

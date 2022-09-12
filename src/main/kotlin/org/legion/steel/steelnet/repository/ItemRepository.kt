@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ItemRepository: MongoRepository<ItemModel, Int> {
+interface ItemRepository: MongoRepository<ItemModel, String> {
 
     fun getItemModelsByItemType(itemType: String): MutableList<ItemModel>
 

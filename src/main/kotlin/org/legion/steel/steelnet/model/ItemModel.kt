@@ -1,14 +1,13 @@
 package org.legion.steel.steelnet.model
 
+import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
-import org.springframework.data.mongodb.core.mapping.MongoId
-import java.math.BigInteger
 
 @Document(collection = "items")
 class ItemModel(
-    @MongoId
-    private var id: BigInteger
+    @Id
+    private var id: String
 ) {
 
     @Field("name")
