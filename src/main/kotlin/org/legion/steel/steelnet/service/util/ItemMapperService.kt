@@ -11,18 +11,15 @@ class ItemMapperService {
     fun mapItemModelInBulk(dtoList: MutableList<ItemDTOInterface>): MutableList<ItemModel> {
         val returnList = emptyList<ItemModel>().toMutableList()
 
-        var idCount = 0
-
         dtoList.forEach {
-            returnList.add(this.mapItemModel(it, idCount))
-            idCount++
+            returnList.add(this.mapItemModel(it))
         }
 
         return returnList
     }
 
-    fun mapItemModel(input: ItemDTOInterface, id: Int): ItemModel {
-        val itemModel = ItemModel(id)
+    fun mapItemModel(input: ItemDTOInterface): ItemModel {
+        val itemModel = ItemModel()
 
         input.getName()?.let { itemModel.setName(it.trim()) }
         input.getNumMats()?.let { itemModel.setNumMats(it.trim()) }

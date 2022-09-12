@@ -6,10 +6,10 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 import kotlin.properties.Delegates
 
 @Document(collection = "items")
-class ItemModel(
+class ItemModel {
+
     @MongoId
-    private var id: Int
-) {
+    private lateinit var id: String
 
     @Field("name")
     private var name: String? = ""

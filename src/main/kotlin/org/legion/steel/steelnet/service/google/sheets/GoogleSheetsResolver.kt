@@ -2,7 +2,7 @@ package org.legion.steel.steelnet.service.google.sheets
 
 
 
-import com.google.api.services.sheets.v4.Sheets
+
 import org.legion.steel.steelnet.config.GoogleConfiguration
 import org.legion.steel.steelnet.dto.ItemDTO
 import org.legion.steel.steelnet.dto.ItemDTOInterface
@@ -120,13 +120,11 @@ class GoogleSheetsResolver(
 
         val receivedModels = emptyList<ItemModel>().toMutableList()
 
-        var idCount = 0
 
         sortedData.forEach{
             receivedModels.add(
-                this.mappingService.mapItemModel(it.value, idCount)
+                this.mappingService.mapItemModel(it.value)
             )
-            idCount++
         }
 
         this.itemRepository.saveAll(receivedModels)
