@@ -157,7 +157,7 @@ class GoogleSheetsResolver(
         return sortedData
     }
 
-    private fun checkForUpdatesEveryXHours(hours: Long) {
+    fun checkForUpdatesEveryXHours(hours: Long) {
         thread(
             start = true
         ) {

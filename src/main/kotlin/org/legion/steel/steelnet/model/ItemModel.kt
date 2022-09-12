@@ -51,6 +51,9 @@ class ItemModel {
     @Field("secondary_armament")
     private var secondaryArmament: Array<String>? = emptyArray()
 
+    @Field("description")
+    private var description: String? = ""
+
     fun getName(): String? {
         return this.name
     }
@@ -166,5 +169,13 @@ class ItemModel {
         val tmpVals = arrayOf<String>().toMutableList()
         values.forEach { tmpVals.add(it) }
         this.secondaryArmament = tmpVals.toTypedArray()
+    }
+
+    fun getDescription(): String? {
+        return this.description
+    }
+
+    fun setDescription(description: String) {
+        this.description = description
     }
 }
