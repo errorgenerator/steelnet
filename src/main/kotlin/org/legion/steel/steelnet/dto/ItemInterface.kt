@@ -29,4 +29,8 @@ interface ItemDTOInterface {
     fun setPrimaryArmament(primaryArmament: String)
     fun getSecondaryArmament(): Array<String>?
     fun setSecondaryArmament(vararg values: String)
+
+    fun getDescription(): String?
+
+    fun setDescription(description: String)
 }

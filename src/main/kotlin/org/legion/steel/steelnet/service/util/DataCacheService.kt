@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service
 class DataCacheService(
     @Autowired private var googleSheetsResolver: GoogleSheetsResolver
 ) {
+
+    init {
+        this.googleSheetsResolver.checkForUpdatesEveryXHours(2) //TODO: add configuration property
+    }
+
     public fun getSheetsData(): HashMap<String?, ItemDTOInterface> {
         return this.googleSheetsResolver.getStoredSheetsData()
     }

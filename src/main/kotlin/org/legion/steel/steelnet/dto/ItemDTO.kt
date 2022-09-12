@@ -49,6 +49,9 @@ class ItemDTO : ItemDTOInterface {
     @JsonProperty("secondary_armament")
     private var secondaryArmament: Array<String>? = emptyArray()
 
+    @JsonProperty("description")
+    private var description = ""
+
 
     override fun getName(): String? {
         return this.name
@@ -75,6 +78,9 @@ class ItemDTO : ItemDTOInterface {
     }
 
     override fun getStackingValues(): Array<String>? {
+        if(this.stackingValues == null) {
+            this.stackingValues = emptyArray()
+        }
         return this.stackingValues
     }
 
@@ -165,6 +171,14 @@ class ItemDTO : ItemDTOInterface {
         val tmpVals = arrayOf<String>().toMutableList()
         values.forEach { tmpVals.add(it) }
         this.secondaryArmament = tmpVals.toTypedArray()
+    }
+
+    override fun getDescription(): String? {
+        return this.description
+    }
+
+    override fun setDescription(description: String) {
+        this.description = description
     }
 
 }

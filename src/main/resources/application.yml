@@ -1,15 +1,24 @@
 server:
   port: 9000
 
+logging:
+  file:
+    path: "/var/log"
+    name: "steelnet_service_api.log"
+  level:
+    root: INFO
+
 spring:
-  security:
-    user:
-      name: testuser
-      password: testuser
+  data:
+    mongodb:
+      database: "foxhole_items"
+      uri: mongodb://localhost:27017/
 
 service:
   google:
     id: "1d9Ti9PxdcqeHPGnOejWWeYdTX-YdREpmeg1uBPROZfw"
+    tokenid: "1YS4NRGxhuWNWqjmnA7A-rtPxAy0RXJuw_SXrbkZHI3g"
     name: "SteelNet"
     tokens: "/home/tilman/IdeaProjects/steelnet/src/main/resources/tokens"
-    credentials: "/home/tilman/IdeaProjects/steelnet/src/main/resources/google/credentials.json"
+    credentials: '{"type": "service_account","project_id": "foxhole-362018","private_key_id": "251b430a19e40f68f272af1b103b3da724ce0cee","private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDORzk4JGNDhzTg\nlwtMX4odlDQ62dZiSSWWIymddKNSKSfbXCNLDpwgFpi7G0/d4t6PsIa1NLW0H+as\nBNukdkG2BqIUuqclb+uMoxVqvh/O9sbHbpP7FkMl9aRSHSrpTO/fh+BhTlPE6mHg\nXPyblTaSMg3+CO2l5R8bB4KIpUqGoI/VMWQS0N2noqgKvdW820cJwWs6KGAujmD9\nudY8gBh9obn4SAWpz24BJeQmX0Fsz0LVsAl1CK3fATHmApze8HDY/OOc5xf9Heu8\n4zDgFMljV8SxRgKquBcsavlVzq0SRMzLFlaBqsGJzsj9FLMbBIhZyUhskyeNUixz\nQEIgswZxAgMBAAECggEAOcFUYoVBq78YDYgM+EnJxIVh6FZkwakkVniq5rSpI9B1\nIeSW1yWUjiF1ivHXN1OVqBqvZN4IwBGsht5nVxFrTZlm2TH3qbI/++UPko8AHfUX\na/Boi4VMsLyp0PnssVzCzs3fA6+oIbrUQ7sVWUR6fo14QHfkfi38OxerszHAf5fE\n6wVf5NGceHxeO/ZuQZ3nzm37i4TEJ3I2NCKRizzm/fL8jCHyukkbV0j8Ex77bqZ2\nvh8yAWL+KcXrc4qncA5Ww0vUP47AZPpbdX1AMozaBNSiPg9wo3/GlGHSGeL7x6Ot\n/mB+/XygikQbzObXVNigT+krJYNAeUD3QJZsqCwZhwKBgQD7T1z7NLI7PQzXn4Rq\nPSiZT9gVv5MNXDv6LTN/0vU58lNBFKRGmA3AT6VmBfBGJ+u8/7sUb9teCE6/ntro\n55g0naPUMM8G5WUZ23i0n7/hNvH1+iWvlKf8/XgL+m6qyZmyhWDHgJt0eSL16YzJ\nfiyUTiKZQ/y0vo5YeG1LoWVk3wKBgQDSILhnTWqWo9uRVxqrCh0mOB5AbR910o+Y\n2J6lLygpETnGhQ5/N8MmCgEwT8iXFvZhKBF8XjGJ1m5Kfwrr8zC2s6RZFjzNIeyA\n4ZgqmM9yj6b+e2QeR/70ektkj6uhOs0ikpMAxUF4O2bsyA8nTYfkMHZD60l1Tg0A\nsWxzuR0urwKBgQCGgN9/A6Ew22f4L8QrKDiGdZltam9GA0uGhpK9oybksLGmb2nM\n7qzNdNNNW3hR1CPzr9ttAMEj/sZHALqhVPK9lnGMq+LiCfymbjSYV7fWzhWKVSu+\nYY3XdcG+h3abqfK8/W3i2Q5atErl2u4jGYi6h2c1KJIkGqkM6Md2ZxdheQKBgBz6\nYjPs2zw3ELq0dnsMBAUXTCS6Z9JJ3X/Ir+g73p/7PiqAgwVMXV9LlephtloP0p6H\ndhHes5o8ti0T5B+yBA/OKmYWyP/JI+KKOf/13vX/lZoWzjHW3/Q7QVZ28cZkY5HX\nAOrkSSkZmBIjbOOQr6LqhATN1+2Te/uSfFBhQQMFAoGBAM5ike3sG/aI1HH08aBx\n0SIxlknPzgweiMQncsCjx/4vRsDm9KE7m0k+74srrogA0Y+jqgTC8Q33ndslZNHz\n7XiuffSZC2lV3DgCj4NDsyrQrXJ38f0WyP1coL964GXQZF6EmaqhZyLEHVO8JGU7\ns6cc5+Hot4YEmhSbRivYqZc8\n-----END PRIVATE KEY-----\n","client_email": "foxholeserviceapi@foxhole-362018.iam.gserviceaccount.com","client_id": "114222079097286312410","auth_uri": "https://accounts.google.com/o/oauth2/auth","token_uri": "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/foxholeserviceapi%40foxhole-362018.iam.gserviceaccount.com"}'
+
