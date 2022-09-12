@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConstructorBinding
 @ConfigurationProperties(prefix = "service.google")
 class GoogleConfiguration(
+    private var cycle: Long,
     private var id: String,
     private var tokenId: String,
     private var name: String,
@@ -50,6 +51,14 @@ class GoogleConfiguration(
 
     fun setTokenId(id: String) {
         this.tokenId = id
+    }
+
+    fun getCycle(): Long {
+        return this.cycle
+    }
+
+    fun setCycle(cycle: Long) {
+        this.cycle = cycle
     }
 
 }

@@ -11,6 +11,7 @@ import org.legion.steel.steelnet.repository.ItemRepository
 import org.legion.steel.steelnet.service.util.ItemMapperService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.math.BigInteger
 import java.time.Duration
 import java.util.*
 import kotlin.concurrent.thread
@@ -120,11 +121,13 @@ class GoogleSheetsResolver(
 
         val receivedModels = emptyList<ItemModel>().toMutableList()
 
+        var idCounter = BigInteger.ZERO
 
         sortedData.forEach{
             receivedModels.add(
-                this.mappingService.mapItemModel(it.value)
+                this.mappingService.mapItemModel(it.value, idCounter)
             )
+                idCounter++
         }
 
         this.itemRepository.saveAll(receivedModels)

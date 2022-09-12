@@ -16,6 +16,7 @@ spring:
 
 service:
   google:
+    cycle: 2
     id: "1d9Ti9PxdcqeHPGnOejWWeYdTX-YdREpmeg1uBPROZfw"
     tokenid: "1YS4NRGxhuWNWqjmnA7A-rtPxAy0RXJuw_SXrbkZHI3g"
     name: "SteelNet"
