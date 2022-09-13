@@ -62,7 +62,7 @@ jobs:
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: 'build/lib/*.jar'
-          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib/'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api/build/lib/'
 
       - name: Deploy .env file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
@@ -71,7 +71,7 @@ jobs:
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './.env'
-          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
       - name: Deploy Dockerfile to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
@@ -80,7 +80,7 @@ jobs:
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './Dockerfile'
-          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
       - name: Deploy docker-compose.yml to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
@@ -89,7 +89,7 @@ jobs:
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './docker-compose.yml'
-          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
       - name: Deploy MongoInit file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
@@ -98,7 +98,7 @@ jobs:
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './setup/mongo/mongo-init.js'
-          remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo'
+          remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api/setup/mongo'
 
       - name: Build and Start Docker container
         uses: appleboy/ssh-action@master
@@ -106,4 +106,4 @@ jobs:
           host: ${{ env.SERVER }}
           username: 'root'
           key: '${{ secrets.DEPLOY_SSH_KEY }}'
-          script: 'cd ${{ env.SFTP_TARGET_DIR }}/services/service-api && docker-compose down && docker-compose up -d --build'
+          script: 'cd ${{ env.SFTP_TARGET_DIR }}services/service-api && docker-compose down && docker-compose up -d --build'
