@@ -64,7 +64,7 @@ class ItemController(
         ]
     )
     @GetMapping(
-        "/api/v1/item/{name}",
+        "/api/v1/item/name/{name}",
         produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE]
     )
     @Cacheable(cacheNames = [CacheConfiguration.RESPONSE_CACHE])
@@ -114,7 +114,7 @@ class ItemController(
     )
     @Cacheable(cacheNames = [CacheConfiguration.RESPONSE_CACHE])
     @GetMapping(
-        "/api/v1/item/{type}",
+        "/api/v1/item/type/{type}",
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun getItemListByType(
