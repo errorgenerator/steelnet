@@ -28,7 +28,7 @@ jobs:
           host: ${{ env.SERVER }}
           username: 'deploy'
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: 'mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib && mkdir -p ${{ env.SFTP_TARGET_DIR }}/logs/ && mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo/'
+          script: 'ls -a && cd ${{ env.SFTP_TARGET_DIR }} && mkdir -p ./services/service-api/build/lib && mkdir -p ./logs/ && mkdir -p ./services/service-api/setup/mongo/'
 
       - name: Checkout repository
         uses: actions/checkout@v1
