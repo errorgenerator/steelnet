@@ -56,59 +56,59 @@ class GoogleSheetsResolver(
                 for (index in row.indices) {
                     when {
                         titleRow[index] == "Name" -> {
-                            itemDTO.setName(row[index].toString())
+                            itemDTO.setName(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Type" -> {
-                            itemDTO.setItemType(row[index].toString())
+                            itemDTO.setItemType(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Base Required Materials" -> {
-                            itemDTO.setNumMats(row[index].toString())
+                            itemDTO.setNumMats(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Mat Type" -> {
-                            itemDTO.setMatsType(row[index].toString())
+                            itemDTO.setMatsType(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Num Per Crate" -> {
-                            itemDTO.setNumPerCrate(row[index].toString())
+                            itemDTO.setNumPerCrate(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Encumbrance" -> {
-                            itemDTO.setEquipWeight(row[index].toString())
+                            itemDTO.setEquipWeight(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Equip Slot" -> {
-                            itemDTO.setEquipSlot(row[index].toString())
+                            itemDTO.setEquipSlot(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Weapon Class" -> {
-                            itemDTO.setWeaponClass(row[index].toString())
+                            itemDTO.setWeaponClass(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Ammo Type" -> {
-                            itemDTO.setAmmoType(row[index].toString())
+                            itemDTO.setAmmoType(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Vehicle Class" -> {
-                            itemDTO.setVehicleClass(row[index].toString())
+                            itemDTO.setVehicleClass(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Num Crew" -> {
-                            itemDTO.setNumCrew(row[index].toString())
+                            itemDTO.setNumCrew(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Primary Armament" -> {
-                            itemDTO.setPrimaryArmament(row[index].toString())
+                            itemDTO.setPrimaryArmament(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index] == "Secondary Armament" -> {
-                            itemDTO.setSecondaryArmament(row[index].toString())
+                            itemDTO.setSecondaryArmament(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
 
                         titleRow[index].startsWith("MPF ") -> {
-                            mpfVals.add(row[index].toString())
+                            mpfVals.add(row[index].toString().lowercase(Locale.getDefault()).trim())
                         }
                     }
                     itemDTO.setStackingValues(*mpfVals.toTypedArray())
