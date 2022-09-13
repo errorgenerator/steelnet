@@ -62,7 +62,7 @@ jobs:
           username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
-          local_path: 'build/lib/${{ env.APPLICATION_JAR }}'
+          local_path: './build/lib/${{ env.APPLICATION_JAR }}'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api/build/lib/'
 
       - name: Deploy .env file to server
