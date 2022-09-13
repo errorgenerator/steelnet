@@ -26,7 +26,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.SERVER }}
-          username: 'deploy'
+          username: 'root'
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: 'cd ${{ env.SFTP_TARGET_DIR }} && mkdir -p ./services/service-api/build/lib && mkdir -p ./logs/ && mkdir -p ./services/service-api/setup/mongo/'
 
@@ -58,7 +58,7 @@ jobs:
       - name: Deploy Artifact to Server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: 'deploy'
+          username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: 'build/lib/*.jar'
@@ -67,7 +67,7 @@ jobs:
       - name: Deploy .env file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: 'deploy'
+          username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './.env'
@@ -76,7 +76,7 @@ jobs:
       - name: Deploy Dockerfile to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: 'deploy'
+          username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './Dockerfile'
@@ -85,7 +85,7 @@ jobs:
       - name: Deploy docker-compose.yml to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: 'deploy'
+          username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './docker-compose.yml'
@@ -94,7 +94,7 @@ jobs:
       - name: Deploy MongoInit file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: 'deploy'
+          username: 'root'
           server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './setup/mongo/mongo-init.js'
@@ -104,6 +104,6 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.SERVER }}
-          username: 'deploy'
+          username: 'root'
           key: '${{ secrets.DEPLOY_SSH_KEY }}'
           script: 'cd ${{ env.SFTP_TARGET_DIR }}/services/service-api && docker-compose down && docker-compose up -d --build'
