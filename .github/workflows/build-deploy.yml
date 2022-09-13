@@ -53,7 +53,7 @@ jobs:
 
       - name: List Build dir contents
         run: |
-          ls -lha ./build/lib/
+          ls -lha 
 
       - name: Deploy Artifact to Server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
