@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SFTP_TARGET_DIR: '/var/lib/steelnet/releases/'
+      SERVER: ${{ secrets.SERVER_SECRET }}
       PROJECT_NAME: steelmind-service-api
       API_SECRET: ${{ secrets.GOOGLE_API_ACCESS_SECRET }}
       MONGO: mongodb://mongodb-server
@@ -24,7 +25,7 @@ jobs:
       - name: Prepare directories if not exist
         uses: appleboy/ssh-action@master
         with:
-          host: 'TODO' #TODO get a server
+          host: ${{ env.SERVER }}
           username: 'deploy'
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: 'mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib && mkdir -p ${{ env.SFTP_TARGET_DIR }}/logs/ && mkdir -p ${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo/'
@@ -58,7 +59,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'deploy'
-          server: "Server" # TODO acquire a server
+          server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: 'build/lib/*.jar'
           remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/build/lib/'
@@ -67,7 +68,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'deploy'
-          server: 'Server' #TODO acquire a server
+          server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './.env'
           remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
@@ -76,7 +77,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'deploy'
-          server: 'Server' #TODO acquire a server
+          server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './Dockerfile'
           remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
@@ -85,7 +86,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'deploy'
-          server: 'Server' #TODO acquire a server
+          server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './docker-compose.yml'
           remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api'
@@ -94,7 +95,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           username: 'deploy'
-          server: 'Server' #TODO acquire a server
+          server: ${{ env.SERVER }}
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
           local_path: './setup/mongo/mongo-init.js'
           remote_path: '${{ env.SFTP_TARGET_DIR }}/services/service-api/setup/mongo'
@@ -102,7 +103,7 @@ jobs:
       - name: Build and Start Docker container
         uses: appleboy/ssh-action@master
         with:
-          host: 'Server'
+          host: ${{ env.SERVER }}
           username: 'deploy'
           key: '${{ secrets.DEPLOY_SSH_KEY }}'
           script: 'cd ${{ env.SFTP_TARGET_DIR }}/services/service-api && docker-compose down && docker-compose up -d --build'
