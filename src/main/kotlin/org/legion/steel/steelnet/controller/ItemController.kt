@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 class ItemController(
@@ -142,14 +143,16 @@ class ItemController(
     )
     @Cacheable(cacheNames = [CacheConfiguration.RESPONSE_CACHE])
     @GetMapping(
-        "/api/v1/item/{key}/{value}",
+        "/api/v1/item/key/**",
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun getItemListByOther(
-        @PathVariable key: String,
-        @PathVariable value: String,
-        @RequestHeader("Authorization") authHeader: String
+        @RequestHeader("Authorization") authHeader: String,
+        request: HttpServletRequest
     ): ResponseEntity<List<ItemDTOInterface>> {
+        val params = request.requestURL.split("/key/")[1]
+        val key = params.split("/")[0]
+        val value = params.split("/")[1]
         val sanKey = PathVariableSanitizer.sanitizePathVariable(key)
         val sanVal = PathVariableSanitizer.sanitizePathVariable(value)
         return this.itemService.buildListResponse(sanVal, sanKey, token = authHeader, searchForTypes = false)
