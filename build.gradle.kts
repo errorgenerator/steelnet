@@ -25,6 +25,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-io:commons-io:2.11.0")

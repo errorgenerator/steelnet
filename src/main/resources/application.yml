@@ -14,6 +14,20 @@ spring:
       database: "foxhole_items"
       uri: mongodb://localhost:27017/
 
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: "/api/v1/docs"
+    version: OPENAPI_3_0
+  swagger-ui:
+    path: "/api/v1/docs"
+    operations-sorter: method
+
 service:
   google:
     cycle: 2
