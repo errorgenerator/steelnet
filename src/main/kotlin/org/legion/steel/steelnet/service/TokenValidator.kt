@@ -19,7 +19,7 @@ class TokenValidator(
     }
 
     private fun formatToken(unformattedToken: String): String {
-        return unformattedToken.replace("Bearer ", "")
+        return unformattedToken.replace("Bearer ", "").trim()
     }
 
     private fun tokenInSheet(formattedToken: String): Boolean {

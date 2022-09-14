@@ -18,9 +18,11 @@ class GoogleTokenSheetService(
     private fun loadTokensFromSheet(): List<String> {
         val fetchedData = this.fetchGoogleSheetsData(this.googleConfiguration.getTokenId(), "Tokens")
         val tokenList = emptyList<String>().toMutableList()
-        if(!fetchedData.isNullOrEmpty()) {
-            for(row in fetchedData) {
-                tokenList.add(row[0].toString())
+        when {
+            !fetchedData.isNullOrEmpty() -> {
+                for(row in fetchedData) {
+                    tokenList.add(row[0].toString())
+                }
             }
         }
 

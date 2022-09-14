@@ -101,20 +101,56 @@ class ItemService(
     private fun getItemListByXFromCache(vararg itemType: String, foundItems: MutableList<ItemDTOInterface>) {
 
         this.dataCacheService.getSheetsData().forEach { it ->
-            val key = itemType[0].lowercase(Locale.getDefault())
-            val value = itemType[1].lowercase(Locale.getDefault())
-            val entryFields = it.value.javaClass.kotlin.memberProperties
-            entryFields.forEach { ot ->
-                // our fields are all private
-                if (ot.visibility == KVisibility.PRIVATE) {
-                    ot.isAccessible = true
-                    val nameOfField = ot.name
-                    val internalVal = ot.getter.call().toString()
-                    ot.isAccessible = false
-                    if (key == nameOfField.lowercase(Locale.getDefault()) && value == internalVal.lowercase(Locale.getDefault())) {
-                        foundItems.add(it.value)
-                    }
+            val key = itemType[1].lowercase(Locale.getDefault())
+            val value = itemType[0].lowercase(Locale.getDefault())
+
+            when {
+                key == "name" && value == it.value.getName() -> {
+                    foundItems.add(it.value)
                 }
+                key == "nummats" && value == it.value.getNumMats() -> {
+                    foundItems.add(it.value)
+                }
+                key == "matstype" && value == it.value.getMatsType() -> {
+                    foundItems.add(it.value)
+                }
+                key == "stackingvalues" && it.value.getStackingValues() != null && it.value.getStackingValues()!!.contains(value) -> {
+                    foundItems.add(it.value)
+                }
+                key == "numpercrate" && value == it.value.getNumPerCrate() -> {
+                    foundItems.add(it.value)
+                }
+                key == "itemtype" && value == it.value.getItemType() -> {
+                    foundItems.add(it.value)
+                }
+                key == "equipweight" && value == it.value.getEquipWeight() -> {
+                    foundItems.add(it.value)
+                }
+                key == "equipslot" && value == it.value.getEquipSlot() -> {
+                    foundItems.add(it.value)
+                }
+                key == "weaponclass" && value == it.value.getWeaponClass() -> {
+                    foundItems.add(it.value)
+                }
+                key == "ammotype" && value == it.value.getAmmoType() -> {
+                    foundItems.add(it.value)
+                }
+                key == "vehicleclass" && value == it.value.getVehicleClass() -> {
+                    foundItems.add(it.value)
+                }
+                key == "numcrew" && value == it.value.getNumCrew() -> {
+                    foundItems.add(it.value)
+                }
+                key == "primaryarmament" && value == it.value.getPrimaryArmament() -> {
+                    foundItems.add(it.value)
+                }
+                key == "secondaryarmament" && it.value.getSecondaryArmament() != null && it.value.getSecondaryArmament()!!.contains(value) -> {
+                    foundItems.add(it.value)
+                }
+                key == "description" && it.value.getDescription()!!.startsWith(value) -> {
+                    foundItems.add(it.value)
+                }
+
             }
 
         }
