@@ -12,14 +12,15 @@ jobs:
   build-deploy:
 
     runs-on: ubuntu-latest
+    environment: linode-prod
     env:
-      SFTP_TARGET_DIR: '/var/lib/steelnet/releases/'
-      SERVER: ${{ secrets.SERVER_SECRET }}
-      PROJECT_NAME: steelmind-service-api
-      API_SECRET: ${{ secrets.GOOGLE_API_ACCESS_SECRET }}
-      MONGO: mongodb://mongodb-server
-      LOGLEVEL: WARN
-      APPLICATION_JAR: steelnet-0.0.1-SNAPSHOT.jar
+      SFTP_TARGET_DIR: ${{ env.SFTP_TARGET_DIR_ENV }}
+      SERVER: ${{ secrets.SERVER_SECRET_ENV }}
+      PROJECT_NAME: ${{ env.PROJECT_NAME_ENV }}
+      API_SECRET: ${{ secrets.GOOGLE_API_ACCESS_SECRET_ENV }}
+      MONGO: ${{ MONGODB_URL_ENV }}
+      LOGLEVEL: ${{ LOGLEVEL_ENV }}
+      APPLICATION_JAR: ${{ APPLICATION_JAR_ENV }}
 
     steps:
 
@@ -28,7 +29,7 @@ jobs:
         with:
           host: ${{ env.SERVER }}
           username: 'root'
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           script: 'cd ${{ env.SFTP_TARGET_DIR }} && mkdir -p ./services/service-api/build/lib && mkdir -p ./logs/ && mkdir -p ./services/service-api/setup/mongo/'
 
       - name: Checkout repository
@@ -61,7 +62,7 @@ jobs:
         with:
           username: 'root'
           server: ${{ env.SERVER }}
-          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           local_path: './build/libs/${{ env.APPLICATION_JAR }}'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api/build/lib/'
 
@@ -70,7 +71,7 @@ jobs:
         with:
           username: 'root'
           server: ${{ env.SERVER }}
-          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           local_path: './.env'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
@@ -79,7 +80,7 @@ jobs:
         with:
           username: 'root'
           server: ${{ env.SERVER }}
-          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           local_path: './Dockerfile'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
@@ -88,7 +89,7 @@ jobs:
         with:
           username: 'root'
           server: ${{ env.SERVER }}
-          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           local_path: './docker-compose.yml'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api'
 
@@ -97,7 +98,7 @@ jobs:
         with:
           username: 'root'
           server: ${{ env.SERVER }}
-          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY_ENV }}
           local_path: './setup/mongo/mongo-init.js'
           remote_path: '${{ env.SFTP_TARGET_DIR }}services/service-api/setup/mongo'
 
