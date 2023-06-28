@@ -18,9 +18,9 @@ jobs:
       SERVER: ${{ secrets.SERVER_SECRET_ENV }}
       PROJECT_NAME: ${{ vars.PROJECT_NAME_ENV }}
       API_SECRET: ${{ secrets.GOOGLE_API_ACCESS_SECRET_ENV }}
-      MONGO: ${{ MONGODB_URL_ENV }}
-      LOGLEVEL: ${{ LOGLEVEL_ENV }}
-      APPLICATION_JAR: ${{ APPLICATION_JAR_ENV }}
+      MONGO: ${{ vars.MONGODB_URL_ENV }}
+      LOGLEVEL: ${{ vars.LOGLEVEL_ENV }}
+      APPLICATION_JAR: ${{ vars.APPLICATION_JAR_ENV }}
 
     steps:
 
